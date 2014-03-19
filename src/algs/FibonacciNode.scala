@@ -1,6 +1,6 @@
 package algs
 
-class FibonacciNode[T <% Ordered[T]](private[algs] var key: T) extends Ordered[FibonacciNode[T]] {
+class FibonacciNode[T <% Ordered[T]](var key: T) extends Ordered[FibonacciNode[T]] {
 	private[algs] var rank: Int = 0
 	private[algs] var parent, firstChild: FibonacciNode[T] = null
 	private[algs] var next, prev: FibonacciNode[T] = this

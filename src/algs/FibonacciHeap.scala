@@ -9,23 +9,24 @@ class FibonacciHeap[T <% Ordered[T]] {
 	private def link(n1: FibonacciNode[T], n2: FibonacciNode[T], fair: Boolean): FibonacciNode[T] = {
 	  if (n1 == null) return n2
 	  if (n2 == null) return n1
-	  if (n1 < n2) {
-	    n1.addChild(n2) 
+	  
+	  def linkChild(parent: FibonacciNode[T], child:FibonacciNode[T]): FibonacciNode[T] = {
+	    parent.addChild(child) 
 	    if (fair) {
-	      n1.rank += 1
-	      n2.typ = 0
+	      parent.rank += 1
+	      child.typ = 0
 	    }
-	    else n2.typ = 2
-	    return n1
+	    else {
+	      child.typ = 2
+	    }
+	    parent
+	  }
+	  
+	  if (n1 < n2) {
+	    return linkChild(n1, n2)
 	  }  
 	  else {  
-	    n2.addChild(n1)  
-	    if (fair) {
-	      n2.rank += 1
-	      n1.typ = 0
-	    }
-	    else n1.typ = 2
-	    return n2
+	    return linkChild(n2, n1)
 	  }
 	}
 	
@@ -44,12 +45,8 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  size += that.size
 	}
 	
-	def decreaseKey(node: FibonacciNode[T], newKey: T) {
-	  if (newKey > node.key) throw new IllegalArgumentException("The new key must be less than the current key!")
-	  
-	  node.key = newKey
-	  if (node ne min) {
-	    var current = node.parent
+	def cascadingCut(node: FibonacciNode[T]) {
+	  	var current = node.parent
 	    while ((current.parent != null) && (current.typ == 1)) {
 	      current.rank -= 1
 	      current.typ = 2
@@ -60,15 +57,19 @@ class FibonacciHeap[T <% Ordered[T]] {
 	      current.typ = 1
 	    }
 	    node.remove()
+	}
+	
+	def decreaseKey(node: FibonacciNode[T], newKey: T) {
+	  if (newKey > node.key) throw new IllegalArgumentException("The new key must be less than the current key!")
+	  
+	  node.key = newKey
+	  if (node ne min) {
+	    cascadingCut(node)
 	    min = link(min, node, false)
 	  }
 	}
 	
-	def deleteMin(): T = {
-	  if (isEmpty()) throw new IllegalStateException("The heap is empty!")
-	  
-	  val minKey = min.key
-	  
+	private def consolidate(parent: FibonacciNode[T]): FibonacciNode[T] = {
 	  val log2 = (x: Int) => Math.ceil(Math.log(x) / Math.log(2)).toInt
 	  val bins = new Array[FibonacciNode[T]](log2(size) + 1)
 	  
@@ -85,15 +86,23 @@ class FibonacciHeap[T <% Ordered[T]] {
 	    bins(currentBin.rank) = currentBin
 	    if (next ne current) addToBin(next)
 	  }
-	  addToBin(min.firstChild)
+	  addToBin(parent.firstChild)
 	    
-	  min = null
+	  var newParent: FibonacciNode[T] = null
 	  bins.foreach { bin =>
 	    if (bin != null) {
-	      if (min == null) min = bin
-	      else min = link(min, bin, false)
+	      if (newParent == null) newParent = bin
+	      else newParent = link(newParent, bin, false)
 	    }
 	  }
+	  newParent
+	}
+	
+	def deleteMin(): T = {
+	  if (isEmpty()) throw new IllegalStateException("The heap is empty!")
+	  
+	  val minKey = min.key
+	  min = consolidate(min)
 	  size -= 1
 	  minKey
 	}
