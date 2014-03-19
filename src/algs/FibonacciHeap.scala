@@ -9,7 +9,7 @@ class FibonacciHeap[T <% Ordered[T]] {
 	private def link(n1: FibonacciNode[T], n2: FibonacciNode[T], fair: Boolean): FibonacciNode[T] = {
 	  if (n1 == null) return n2
 	  if (n2 == null) return n1
-	  if (n1.key < n2.key) {
+	  if (n1 < n2) {
 	    n1.addChild(n2) 
 	    if (fair) {
 	      n1.rank += 1
