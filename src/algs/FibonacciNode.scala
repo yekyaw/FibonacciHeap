@@ -1,10 +1,10 @@
 package algs
 
-class FibonacciNode[T <% Ordered[T]](var key: T) {
-	var rank: Int = 0
-	var parent, firstChild: FibonacciNode[T] = null
-	var next, prev: FibonacciNode[T] = this
-	var typ: Int = 2
+class FibonacciNode[T <% Ordered[T]](private[algs] var key: T) {
+	private[algs] var rank: Int = 0
+	private[algs] var parent, firstChild: FibonacciNode[T] = null
+	private[algs] var next, prev: FibonacciNode[T] = this
+	private[algs] var typ: Int = 2
 	
 	def remove() {
 	  assert(parent != null)

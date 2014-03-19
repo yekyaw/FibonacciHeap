@@ -6,7 +6,7 @@ object TestHeap {
 	def main(args: Array[String]) {
 	  val currentTime = System.currentTimeMillis()
 	  val tree = new FibonacciHeap[Int]()
-	  val numIterations = 1000
+	  val numIterations = 1000000
 	  1 to numIterations foreach { i =>
 	    val node = new FibonacciNode(Random.nextInt())
 	    tree.insert(node)

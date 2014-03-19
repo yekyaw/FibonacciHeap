@@ -3,8 +3,8 @@ package algs
 import util.control.Breaks._
 
 class FibonacciHeap[T <% Ordered[T]] {
-	var min: FibonacciNode[T] = null
-	var size: Int = 0
+	private var min: FibonacciNode[T] = null
+	private var size: Int = 0
 	
 	private def link(n1: FibonacciNode[T], n2: FibonacciNode[T], fair: Boolean): FibonacciNode[T] = {
 	  if (n1 == null) return n2
