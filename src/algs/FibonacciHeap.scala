@@ -71,22 +71,21 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  
 	  val log2 = (x: Int) => Math.ceil(Math.log(x) / Math.log(2)).toInt
 	  val bins = new Array[FibonacciNode[T]](log2(size) + 1)
-	  var current = min.firstChild
-	  breakable {
-	    while (current != null) {
-	      val next = current.next
-	      current.remove()
-	      var currentBin = current
-	      while (bins(currentBin.rank) != null) {
-	        val bin = bins(currentBin.rank)
-	        bins(currentBin.rank) = null
-	        currentBin = link(currentBin, bin, true)
-	      }
-	      bins(currentBin.rank) = currentBin
-	      if (current eq next) break
-	      current = next
+	  
+	  def addToBin(current: FibonacciNode[T]) {
+	    if (current == null) return
+	    val next = current.next
+	    current.remove()
+	    var currentBin = current
+	    while (bins(currentBin.rank) != null) {  
+	      val bin = bins(currentBin.rank)
+	      bins(currentBin.rank) = null
+	      currentBin = link(currentBin, bin, true)  
 	    }
+	    bins(currentBin.rank) = currentBin
+	    if (next ne current) addToBin(next)
 	  }
+	  addToBin(min.firstChild)
 	    
 	  min = null
 	  bins.foreach { bin =>
