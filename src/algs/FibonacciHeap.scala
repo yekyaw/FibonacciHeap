@@ -29,8 +29,8 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  }
 	}
 	
-	def insert(FibonacciNode: FibonacciNode[T]) {
-	  min = link(min, FibonacciNode, false)
+	def insert(node: FibonacciNode[T]) {
+	  min = link(min, node, false)
 	  size += 1
 	}
 	
@@ -44,12 +44,12 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  size += that.size
 	}
 	
-	def decreaseKey(FibonacciNode: FibonacciNode[T], newKey: T) {
-	  if (newKey > FibonacciNode.key) throw new IllegalArgumentException("The new key must be less than the current key!")
+	def decreaseKey(node: FibonacciNode[T], newKey: T) {
+	  if (newKey > node.key) throw new IllegalArgumentException("The new key must be less than the current key!")
 	  
-	  FibonacciNode.key = newKey
-	  if (FibonacciNode ne min) {
-	    var current = FibonacciNode.parent
+	  node.key = newKey
+	  if (node ne min) {
+	    var current = node.parent
 	    while ((current.parent != null) && (current.typ == 1)) {
 	      current.rank -= 1
 	      current.typ = 2
@@ -59,8 +59,8 @@ class FibonacciHeap[T <% Ordered[T]] {
 	    if ((current.parent != null) && (current.typ == 0)) {
 	      current.typ = 1
 	    }
-	    FibonacciNode.remove()
-	    min = link(min, FibonacciNode, false)
+	    node.remove()
+	    min = link(min, node, false)
 	  }
 	}
 	
@@ -99,8 +99,8 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  minKey
 	}
 	
-	def delete(FibonacciNode: FibonacciNode[T], minVal: T) {
-	  decreaseKey(FibonacciNode, minVal)
+	def delete(node: FibonacciNode[T], minVal: T) {
+	  decreaseKey(node, minVal)
 	  deleteMin()
 	}
 	
