@@ -4,7 +4,7 @@ import util.control.Breaks._
 
 class FibonacciHeap[T <% Ordered[T]] {
 	private var min: FibonacciNode[T] = null
-	private var size: Int = 0
+	private var _size: Int = 0
 	
 	private def link(n1: FibonacciNode[T], n2: FibonacciNode[T], fair: Boolean): FibonacciNode[T] = {
 	  if (n1 == null) return n2
@@ -112,7 +112,15 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  deleteMin()
 	}
 	
+	def size = _size
+	def size_= (value: Int):Unit = _size = value
+	
 	def isEmpty(): Boolean = {
 	  size == 0
+	}
+	
+	def clear() {
+	  min = null
+	  size = 0
 	}
 }
