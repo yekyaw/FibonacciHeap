@@ -45,7 +45,7 @@ class FibonacciHeap[T <% Ordered[T]] {
 	  size += that.size
 	}
 	
-	def cascadingCut(node: FibonacciNode[T]) {
+	private def cascadingCut(node: FibonacciNode[T]) {
 	  	var current = node.parent
 	    while ((current.parent != null) && (current.typ == 1)) {
 	      current.rank -= 1
