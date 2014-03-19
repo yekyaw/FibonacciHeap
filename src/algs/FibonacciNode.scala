@@ -1,9 +1,9 @@
 package algs
 
-class Node[T <% Ordered[T]](var key: T) {
+class FibonacciNode[T <% Ordered[T]](var key: T) {
 	var rank: Int = 0
-	var parent, firstChild: Node[T] = null
-	var next, prev: Node[T] = this
+	var parent, firstChild: FibonacciNode[T] = null
+	var next, prev: FibonacciNode[T] = this
 	var typ: Int = 2
 	
 	def remove() {
@@ -19,7 +19,7 @@ class Node[T <% Ordered[T]](var key: T) {
 	  prev = this
 	}
 
-	def addChild(child: Node[T]) {
+	def addChild(child: FibonacciNode[T]) {
 	  if (firstChild == null) {	
 	    firstChild = child
 	  }

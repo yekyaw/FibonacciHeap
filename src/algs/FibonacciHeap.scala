@@ -2,11 +2,11 @@ package algs
 
 import util.control.Breaks._
 
-class Tree[T <% Ordered[T]] {
-	var min: Node[T] = null
+class FibonacciHeap[T <% Ordered[T]] {
+	var min: FibonacciNode[T] = null
 	var size: Int = 0
 	
-	private def link(n1: Node[T], n2: Node[T], fair: Boolean): Node[T] = {
+	private def link(n1: FibonacciNode[T], n2: FibonacciNode[T], fair: Boolean): FibonacciNode[T] = {
 	  if (n1 == null) return n2
 	  if (n2 == null) return n1
 	  if (n1.key < n2.key) {
@@ -29,8 +29,8 @@ class Tree[T <% Ordered[T]] {
 	  }
 	}
 	
-	def insert(node: Node[T]) {
-	  min = link(min, node, false)
+	def insert(FibonacciNode: FibonacciNode[T]) {
+	  min = link(min, FibonacciNode, false)
 	  size += 1
 	}
 	
@@ -39,17 +39,17 @@ class Tree[T <% Ordered[T]] {
 	  min.key
 	}
 	
-	def meld(that: Tree[T]) {
+	def meld(that: FibonacciHeap[T]) {
 	  min = link(min, that.min, false)
 	  size += that.size
 	}
 	
-	def decreaseKey(node: Node[T], newKey: T) {
-	  if (newKey > node.key) throw new IllegalArgumentException("The new key must be less than the current key!")
+	def decreaseKey(FibonacciNode: FibonacciNode[T], newKey: T) {
+	  if (newKey > FibonacciNode.key) throw new IllegalArgumentException("The new key must be less than the current key!")
 	  
-	  node.key = newKey
-	  if (node ne min) {
-	    var current = node.parent
+	  FibonacciNode.key = newKey
+	  if (FibonacciNode ne min) {
+	    var current = FibonacciNode.parent
 	    while ((current.parent != null) && (current.typ == 1)) {
 	      current.rank -= 1
 	      current.typ = 2
@@ -59,8 +59,8 @@ class Tree[T <% Ordered[T]] {
 	    if ((current.parent != null) && (current.typ == 0)) {
 	      current.typ = 1
 	    }
-	    node.remove()
-	    min = link(min, node, false)
+	    FibonacciNode.remove()
+	    min = link(min, FibonacciNode, false)
 	  }
 	}
 	
@@ -70,7 +70,7 @@ class Tree[T <% Ordered[T]] {
 	  val minKey = min.key
 	  
 	  val log2 = (x: Int) => Math.ceil(Math.log(x) / Math.log(2)).toInt
-	  val bins = new Array[Node[T]](log2(size) + 1)
+	  val bins = new Array[FibonacciNode[T]](log2(size) + 1)
 	  var current = min.firstChild
 	  breakable {
 	    while (current != null) {
@@ -99,8 +99,8 @@ class Tree[T <% Ordered[T]] {
 	  minKey
 	}
 	
-	def delete(node: Node[T], minVal: T) {
-	  decreaseKey(node, minVal)
+	def delete(FibonacciNode: FibonacciNode[T], minVal: T) {
+	  decreaseKey(FibonacciNode, minVal)
 	  deleteMin()
 	}
 	
